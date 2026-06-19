@@ -1,0 +1,19 @@
+<% content_for :title, @task.title %>
+
+<p><%= link_to "← タスク一覧へ", tasks_path %></p>
+
+<%# 第12章: 表示も一覧と同じ _task（id="task_x" の frame）を使う %>
+<%= render @task %>
+
+<section class="comments">
+  <h2>コメント</h2>
+  <div id="<%= dom_id(@task, :comments) %>">
+    <%= render @task.comments.includes(:user).order(:created_at) %>
+  </div>
+
+  <%# 第16章: コメント追加。Turbo Streams で末尾に追記する %>
+  <%= form_with model: [@task, Comment.new] do |form| %>
+    <%= form.text_area :body, placeholder: "コメントを書く" %>
+    <%= form.submit "コメント", data: { turbo_submits_with: "送信中…" } %>
+  <% end %>
+</section>

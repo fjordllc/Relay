@@ -1,0 +1,4 @@
+<%# 第16/17章: 行を消し、件数を更新し、通知する %>
+<%= turbo_stream.remove @task %>
+<%= turbo_stream.update "task_count" do %><%= Task.count %><% end %>
+<%= turbo_stream.append "toasts", partial: "toasts/toast", locals: { message: "タスクを削除しました。" } %>

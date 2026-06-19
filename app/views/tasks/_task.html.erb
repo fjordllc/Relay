@@ -1,0 +1,21 @@
+<%# 第12章: タスク1件の表示。frame で囲み、id を dom_id で揃える %>
+<%= turbo_frame_tag task do %>
+  <div class="task">
+    <span class="task-title"><%= link_to task.title, task_path(task) %></span>
+    <span class="task-status status-<%= task.status %>"><%= task.status %></span>
+    <% if task.assignee %>
+      <span class="task-assignee">@<%= task.assignee.name %></span>
+    <% end %>
+    <% if task.due_on %>
+      <span class="task-due"><%= task.due_on.strftime("%m/%d") %></span>
+    <% end %>
+    <% task.tags.each do |tag| %>
+      <span class="tag"><%= tag.name %></span>
+    <% end %>
+    <span class="task-actions">
+      <%= link_to "編集", edit_task_path(task) %>
+      <%= button_to "削除", task_path(task), method: :delete,
+            data: { turbo_confirm: "「#{task.title}」を削除しますか?" } %>
+    </span>
+  </div>
+<% end %>

@@ -1,0 +1,5 @@
+<%# 第12章: 同じ id の frame の中で編集する（インライン編集） %>
+<%= turbo_frame_tag task do %>
+  <%= render "form", task: task %>
+  <%= link_to "キャンセル", task_path(task) %>
+<% end %>

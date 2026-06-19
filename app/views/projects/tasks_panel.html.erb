@@ -1,0 +1,8 @@
+<%# 第13章: src で遅延読み込みされる中身。同じ id の frame を返す %>
+<%= turbo_frame_tag "project_tasks" do %>
+  <ul>
+    <% @project.tasks.order(:id).each do |task| %>
+      <li><%= link_to task.title, task_path(task) %>（<%= task.status %>）</li>
+    <% end %>
+  </ul>
+<% end %>

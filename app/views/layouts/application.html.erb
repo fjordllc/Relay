@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Relay" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Relay">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <%# 第27章: ログイン中だけ自分宛ての通知を購読する（第18章 broadcast） %>
+    <% if authenticated? %>
+      <%= turbo_stream_from Current.user %>
+    <% end %>
+
+    <header class="app-header">
+      <%= link_to "Relay", root_path %>
+      <% if authenticated? %>
+        <nav><%= button_to "ログアウト", session_path, method: :delete %></nav>
+      <% end %>
+    </header>
+
+    <%# 第17/27章: フラッシュとトーストの入れ物（読み上げ対象） %>
+    <div id="flash" role="status" aria-live="polite">
+      <%= render "layouts/flash" %>
+    </div>
+    <div id="toasts" role="status" aria-live="polite"></div>
+
+    <%# 第26章: モーダル用の空 frame %>
+    <%= turbo_frame_tag "modal" %>
+
+    <main>
+      <%= yield %>
+    </main>
+  </body>
+</html>

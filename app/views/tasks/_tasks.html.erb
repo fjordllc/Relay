@@ -1,0 +1,8 @@
+<%# 第17章: 一覧領域。空状態の分岐も含めて1つの partial にまとめる %>
+<div id="tasks">
+  <% if tasks.any? %>
+    <%= render tasks %>
+  <% else %>
+    <p class="empty">タスクはありません。</p>
+  <% end %>
+</div>

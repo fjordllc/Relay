@@ -1,0 +1,6 @@
+<%# 第26章: 遅延タブ。共通の tab_content frame を返す %>
+<%= turbo_frame_tag "tab_content" do %>
+  <h3>概要</h3>
+  <p><%= @project.description.presence || "説明はありません。" %></p>
+  <p>タスク数: <%= @project.tasks.count %></p>
+<% end %>

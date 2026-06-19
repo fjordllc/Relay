@@ -1,0 +1,40 @@
+<% content_for :title, "タスク" %>
+
+<h1>タスク</h1>
+
+<p>合計 <span id="task_count"><%= Task.count %></span> 件</p>
+
+<%# 第26章: モーダルで新規作成 %>
+<p><%= link_to "新規作成（モーダル）", new_task_path, data: { turbo_frame: "modal" } %></p>
+
+<%# 第16章: ページ内のインライン作成フォーム %>
+<section class="new-task">
+  <h2>新規タスク</h2>
+  <div id="new_task_form">
+    <%= render "form", task: @task %>
+  </div>
+</section>
+
+<%# 第23章: 検索・絞り込み（GET、frame を差し替え、Stimulus で debounce 送信） %>
+<%= form_with url: tasks_path, method: :get,
+      data: { turbo_frame: "task_list", controller: "search",
+              action: "input->search#submit change->search#submit" } do |form| %>
+  <%= form.search_field :q, value: params[:q], placeholder: "タイトルで検索" %>
+  <%= form.select :status, Task.statuses.keys, { include_blank: "すべて", selected: params[:status] } %>
+  <%= form.submit "検索" %>
+<% end %>
+
+<%# 第23/24章: 結果は frame。advance で URL に条件を反映 %>
+<%= turbo_frame_tag "task_list", data: { turbo_action: "advance" } do %>
+  <p><%= @tasks.size %> 件該当</p>
+
+  <%= render "tasks", tasks: @paged_tasks %>
+
+  <div id="pagination" data-controller="infinite-scroll">
+    <% if @next_page %>
+      <%= link_to "もっと読む",
+            tasks_path(page: @next_page, q: params[:q], status: params[:status]),
+            data: { turbo_stream: true, infinite_scroll_target: "button" } %>
+    <% end %>
+  </div>
+<% end %>

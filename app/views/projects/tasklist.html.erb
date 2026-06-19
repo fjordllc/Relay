@@ -1,0 +1,9 @@
+<%# 第26章: 遅延タブ。共通の tab_content frame を返す %>
+<%= turbo_frame_tag "tab_content" do %>
+  <h3>タスク</h3>
+  <ul>
+    <% @project.tasks.order(:id).each do |task| %>
+      <li><%= link_to task.title, task_path(task) %>（<%= task.status %>）</li>
+    <% end %>
+  </ul>
+<% end %>

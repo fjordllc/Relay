@@ -1,0 +1,8 @@
+<%# 第26章: モーダル。modal frame の中に dialog を置き、Stimulus で開く %>
+<%= turbo_frame_tag "modal" do %>
+  <dialog data-controller="modal" data-action="close->modal#cleanup">
+    <h2>新規タスク</h2>
+    <button type="button" data-action="modal#close" aria-label="閉じる">×</button>
+    <%= render "form", task: @task %>
+  </dialog>
+<% end %>

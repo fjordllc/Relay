@@ -1,0 +1,4 @@
+<%# 第16章: 更新した行を replace（dom_id で表示側と target が揃う） %>
+<%= turbo_stream.replace @task %>
+<%= turbo_stream.update "flash", partial: "layouts/flash" %>
+<%= turbo_stream.append "toasts", partial: "toasts/toast", locals: { message: "タスクを更新しました。" } %>
