@@ -31,6 +31,11 @@
 
     <header class="app-header">
       <%= link_to "Relay", root_path %>
+      <%= link_to "プロジェクト", projects_path %>
+      <div data-controller="dropdown" data-action="click@window->dropdown#close keydown.esc@window->dropdown#close">
+        <button type="button" data-dropdown-target="button" data-action="dropdown#toggle" aria-expanded="false">表示メニュー</button>
+        <ul data-dropdown-target="menu" hidden><li><%= link_to "タスク一覧", tasks_path %></li></ul>
+      </div>
       <% if authenticated? %>
         <nav><%= button_to "ログアウト", session_path, method: :delete %></nav>
       <% end %>

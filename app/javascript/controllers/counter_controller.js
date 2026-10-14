@@ -9,6 +9,6 @@ export default class extends Controller {
   }
 
   count() {
-    this.outputTarget.textContent = this.fieldTarget.value.length
+    this.outputTarget.textContent = Array.from(new Intl.Segmenter("ja", { granularity: "grapheme" }).segment(this.fieldTarget.value)).length
   }
 }

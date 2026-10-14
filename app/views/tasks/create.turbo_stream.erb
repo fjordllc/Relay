@@ -1,9 +1,6 @@
-<%# 第16/17/26/27章: 1レスポンスで複数箇所を同時更新 %>
-<%= turbo_stream.prepend "tasks", @task %>
 <%= turbo_stream.update "new_task_form" do %>
-  <%= render "form", task: Task.new %>
+  <%= render "form", task: Task.new, context: "inline" %>
 <% end %>
 <%= turbo_stream.update "modal" %>
-<%= turbo_stream.update "task_count" do %><%= Task.count %><% end %>
 <%= turbo_stream.update "flash", partial: "layouts/flash" %>
-<%= turbo_stream.append "toasts", partial: "toasts/toast", locals: { message: "タスクを作成しました。" } %>
+<%= turbo_stream.update "task_changes", partial: "tasks/change" %>

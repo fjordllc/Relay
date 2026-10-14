@@ -9,16 +9,10 @@
 </p>
 
 <%# 第26章: 遅延タブ。各タブが共通の tab_content frame を返す %>
-<nav role="tablist" class="tabs">
-  <%= link_to "概要", overview_project_path(@project), role: "tab", data: { turbo_frame: "tab_content" } %>
-  <%= link_to "タスク", tasklist_project_path(@project), role: "tab", data: { turbo_frame: "tab_content" } %>
+<nav aria-label="プロジェクト内の表示" class="tabs">
+  <%= link_to "概要", overview_project_path(@project), data: { turbo_frame: "tab_content" } %>
+  <%= link_to "タスク", tasklist_project_path(@project), data: { turbo_frame: "tab_content" } %>
 </nav>
 <%= turbo_frame_tag "tab_content" do %>
   <p>タブを選んでください。</p>
-<% end %>
-
-<%# 第13章: タスク一覧を遅延読み込み（src + loading=lazy、skeleton をプレースホルダに） %>
-<h2>タスク</h2>
-<%= turbo_frame_tag "project_tasks", src: tasks_panel_project_path(@project), loading: :lazy do %>
-  <div class="skeleton">タスクを読み込んでいます…</div>
 <% end %>

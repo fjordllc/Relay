@@ -1,7 +1,7 @@
 <%# 第12章: タスク1件の表示。frame で囲み、id を dom_id で揃える %>
 <%= turbo_frame_tag task do %>
   <div class="task">
-    <span class="task-title"><%= link_to task.title, task_path(task) %></span>
+    <span class="task-title"><%= link_to task.title, task_path(task), data: { turbo_frame: "_top" } %></span>
     <span class="task-status status-<%= task.status %>"><%= task.status %></span>
     <% if task.assignee %>
       <span class="task-assignee">@<%= task.assignee.name %></span>

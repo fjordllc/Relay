@@ -17,6 +17,6 @@ Rails.application.routes.draw do
   # ヘルスチェック
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # ルート: プロジェクト一覧
-  root "projects#index"
+  # ルート: タスク一覧
+  root "tasks#index"
 end

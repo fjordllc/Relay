@@ -11,9 +11,10 @@ export default class extends Controller {
   }
 
   close(event) {
-    if (!this.element.contains(event.target)) {
+    if (event.key === "Escape" || !this.element.contains(event.target)) {
       this.menuTarget.hidden = true
       this.buttonTarget.setAttribute("aria-expanded", "false")
+      if (event.key === "Escape") this.buttonTarget.focus()
     }
   }
 }

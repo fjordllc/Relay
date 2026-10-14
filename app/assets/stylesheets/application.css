@@ -8,3 +8,19 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+body { font-family: sans-serif; line-height: 1.6; margin: 1rem auto; padding: 0 1rem; max-width: 70rem; }
+input, select, textarea, button { font: inherit; }
+input, select, textarea { max-width: 100%; }
+form > div { margin-block: .75rem; }
+.task { border-bottom: 1px solid #ccc; padding: .75rem; }
+.task-actions { display: inline-flex; gap: .75rem; margin-inline: 1rem; }
+nav { display: flex; flex-wrap: wrap; gap: 1rem; margin-block: 1rem; }
+.skeleton { background: #eee; padding: 1rem; }
+.d-none, [hidden] { display: none !important; }
+.error-summary, .field-error { color: #922; }
+dialog { max-width: min(90vw, 40rem); max-height: 85vh; overflow: auto; }
+dialog::backdrop { background: #0006; }
+:focus-visible { outline: 3px solid #1764b0; outline-offset: 2px; }
+
+turbo-frame { display: block; }

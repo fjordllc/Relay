@@ -1,9 +1,2 @@
-<%# 第24章: 「もっと読む」。続きを末尾に append し、ボタンを差し替える %>
 <%= turbo_stream.append "tasks", partial: "tasks/task", collection: @paged_tasks %>
-<%= turbo_stream.update "pagination" do %>
-  <% if @next_page %>
-    <%= link_to "もっと読む",
-          tasks_path(page: @next_page, q: params[:q], status: params[:status]),
-          data: { turbo_stream: true, infinite_scroll_target: "button" } %>
-  <% end %>
-<% end %>
+<%= turbo_stream.update "pagination", partial: "tasks/pagination" %>

@@ -1,4 +1,8 @@
-<%= form_with model: task do |form| %>
+<% context = local_assigns.fetch(:context, "page") %>
+<% scope_id = "#{context}_#{dom_id(task)}" %>
+<%= form_with model: task, namespace: scope_id,
+  data: { turbo: context != "page" } do |form| %>
+  <%= hidden_field_tag :form_context, context %>
   <% if task.errors.any? %>
     <div role="alert" tabindex="-1" data-controller="autofocus" class="error-summary">
       <%= pluralize(task.errors.count, "件") %>のエラーがあります。
@@ -19,9 +23,9 @@
     <%= form.label :title, "タイトル" %>
     <%= form.text_field :title,
           "aria-invalid": task.errors[:title].any?,
-          "aria-describedby": ("title_error" if task.errors[:title].any?) %>
+          "aria-describedby": ("#{scope_id}_title_error" if task.errors[:title].any?) %>
     <% if task.errors[:title].any? %>
-      <span id="title_error" class="field-error"><%= task.errors[:title].to_sentence %></span>
+      <span id="<%= scope_id %>_title_error" class="field-error"><%= task.errors[:title].to_sentence %></span>
     <% end %>
   </div>
 
@@ -43,8 +47,13 @@
 
   <div>
     <%= form.label :due_on, "期限" %>
-    <%= form.date_field :due_on %>
+    <%= form.date_field :due_on, data: { controller: "datepicker", action: "turbo:before-cache@document->datepicker#teardown" } %>
   </div>
+
+  <fieldset>
+    <legend>タグ</legend>
+    <%= form.collection_check_boxes :tag_ids, Tag.order(:name), :id, :name %>
+  </fieldset>
 
   <%= form.submit "保存", data: { turbo_submits_with: "送信中…" } %>
 <% end %>

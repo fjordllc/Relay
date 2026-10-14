@@ -1,17 +1,17 @@
 import { Controller } from "@hotwired/stimulus"
 
-// 第26章: <dialog> を使ったモーダル
 export default class extends Controller {
   connect() {
     this.element.showModal()
   }
 
-  close() {
-    this.element.close()
-  }
+  close() { this.element.close() }
+  cleanup() { this.element.remove() }
 
-  // close イベント（Esc など）で、閉じたダイアログを DOM から取り除く
-  cleanup() {
-    this.element.remove()
+  disconnect() {
+    // Validation may replace the dialog. Do not steal focus from its replacement.
+    if (!document.querySelector("dialog[open]")) {
+      document.getElementById("new_task_modal_link")?.focus()
+    }
   }
 }

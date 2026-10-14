@@ -1,15 +1,20 @@
 import { Controller } from "@hotwired/stimulus"
-
-// 第23章: 入力に追従して検索フォームを送信する（debounce）
 export default class extends Controller {
   static values = { delay: { type: Number, default: 300 } }
-
-  submit() {
+  connect() { this.lastSubmitted = this.signature() }
+  signature() { return new URLSearchParams(new FormData(this.element)).toString() }
+  startComposition() { this.composing = true; clearTimeout(this.timeout) }
+  endComposition() { this.composing = false; this.submit() }
+  submit(event) {
     clearTimeout(this.timeout)
-    this.timeout = setTimeout(() => this.element.requestSubmit(), this.delayValue)
+    if (this.composing || event?.isComposing) return
+    this.timeout = setTimeout(() => {
+      const signature = this.signature()
+      // input の後の blur に伴う change で、同じ検索を再送しない。
+      if (signature === this.lastSubmitted) return
+      this.lastSubmitted = signature
+      this.element.requestSubmit()
+    }, this.delayValue)
   }
-
-  disconnect() {
-    clearTimeout(this.timeout)
-  }
+  disconnect() { clearTimeout(this.timeout) }
 }

@@ -1,3 +1,3 @@
 <% flash.each do |type, message| %>
-  <div class="flash flash-<%= type %>"><%= message %></div>
+  <div data-turbo-temporary class="flash flash-<%= type %>"><%= message %></div>
 <% end %>

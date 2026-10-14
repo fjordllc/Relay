@@ -10,7 +10,13 @@ class Tasks::CommentsController < ApplicationController
         format.html { redirect_to @task }
       end
     else
-      redirect_to @task, alert: "コメントを入力してください。", status: :see_other
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.update(helpers.dom_id(@task, :comment_form),
+            partial: "comments/form", locals: { task: @task, comment: @comment }), status: :unprocessable_entity
+        end
+        format.html { render "tasks/show", status: :unprocessable_entity }
+      end
     end
   end
 
@@ -30,6 +36,6 @@ class Tasks::CommentsController < ApplicationController
   end
 
   def comment_params
-    params.expect(comment: [:body])
+    params.expect(comment: [ :body ])
   end
 end

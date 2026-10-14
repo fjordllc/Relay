@@ -7,8 +7,8 @@
 
 ## 前提
 
-- Ruby 3.3 以上
-- Rails 8.0 以上（本リポジトリは Rails 8.1 で動作確認）
+- Ruby 3.3.5
+- Rails 8.1.3（Gemfile.lock を使用）
 - JavaScript は importmap（ビルド工程なし）
 
 ## セットアップと起動
@@ -30,6 +30,7 @@ bin/rails server
 
 ```bash
 bin/rails test                         # モデル・統合テスト
+bin/rails test:system                  # Chrome による操作テスト
 bin/rails test test/integration/smoke_test.rb  # 主要ページとフローのスモークテスト
 ```
 
@@ -39,7 +40,7 @@ bin/rails test test/integration/smoke_test.rb  # 主要ページとフローの�
 
 | ファイル | 役割 | 章 |
 | --- | --- | --- |
-| `app/models/task.rb` | 中心リソース。`status` enum、`broadcasts_to` | 第4・5・18章 |
+| `app/models/task.rb` | 中心リソース。`status` enum、変更通知の broadcast | 第4・5・18章 |
 | `app/controllers/tasks_controller.rb` | 検索・ページネーション・Streams・422 | 第8・16・23・24章 |
 | `app/views/tasks/_task.html.erb` | タスク1件の表示（frame） | 第12章 |
 | `app/views/tasks/_tasks.html.erb` | 一覧領域（空状態分岐） | 第17章 |
@@ -51,3 +52,15 @@ bin/rails test test/integration/smoke_test.rb  # 主要ページとフローの�
 ## ライセンス
 
 MIT License. Copyright (c) 2026 FjordBootCamp.
+
+## 更新と一覧の範囲
+
+一覧は q / status / project_id / tag_id を保って再取得します。編集・モーダル中は自動更新を止め、「最新の一覧を表示」で更新します。追記モードの更新は先頭へ戻ります。開発の Action Cable は async なので、別プロセスの console からの変更は配信されません。
+
+seed は学習用データを削除して作り直します。既存ユーザーのパスワードは上書きしません。乱数・日付・ID の完全再現は保証しません。
+
+## 外部ライブラリ
+
+Chart.js 4.4.9 と flatpickr 4.6.13 を vendor/javascript に固定配置しています（MIT、各ライセンスは vendor/javascript/LICENSES.md）。CSS もローカルに配置し、実行時の CDN 接続は不要です。before-cache と disconnect の破棄処理は何度呼ばれても安全です。
+
+本アプリは全ログインユーザーが全タスクを共有する教材です。権限剥奪後の Cable 購読失効など、本番運用の認可機構は別途必要です。
